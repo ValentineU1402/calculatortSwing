@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import com.ushych.luxoft.controllers.CalculateController;
 
@@ -97,9 +99,16 @@ public class View extends JFrame {
             }
         });
 
-        if (checkBox.isSelected()) {
-
+        checkBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (checkBox.isSelected()) {
+                    String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
+                            secondField.getText());
+                    resultField.setText(result);
+                }
         }
+        });
 
         panel.add(panelExpression, BorderLayout.NORTH);
         panel.add(panelAction, BorderLayout.CENTER);
