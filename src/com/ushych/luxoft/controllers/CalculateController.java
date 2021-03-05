@@ -2,6 +2,7 @@ package com.ushych.luxoft.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalculateController {
 
@@ -29,7 +30,7 @@ public class CalculateController {
         default:
             break;
         }
-        addCalculateHistory((firstInt + operation + secondInt) + " = " + result + "\n");
+        addCalculateHistory((firstInt + operation + secondInt) + " = " + result);
         return result;
     }
 
@@ -61,11 +62,8 @@ public class CalculateController {
     }
 
     public String getCalculateHistory() {
-        String result = "";
-        for (String expresion : calculateHistory) {
-            result += expresion;
-        }
-        return result;
+        return calculateHistory.stream().map(expression -> String.valueOf(expression))
+                .collect(Collectors.joining("\n"));
     }
 
 }

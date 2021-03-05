@@ -1,6 +1,7 @@
 package com.ushych.luxoft;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +33,7 @@ public class View extends JFrame {
         JFrame frame = new JFrame("Swing calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setSize(400, 500);
+        frame.setSize(300, 400);
 
         JTabbedPane tablePane = createTableWithPanes();
 
@@ -64,7 +65,7 @@ public class View extends JFrame {
         JPanel panelExpression = new JPanel();
         panelExpression.setLayout(new GridLayout(0, 3));
         JPanel panelAction = new JPanel();
-        panelAction.setLayout(new GridLayout(0, 2));
+        panelAction.setLayout(new FlowLayout());
         JPanel panelResult = new JPanel();
         panelResult.setLayout(new GridLayout(0, 2));
 
@@ -77,8 +78,8 @@ public class View extends JFrame {
 
         JCheckBox checkBox = new JCheckBox("Calculate on the fly");
         JButton calculateButton = new JButton("Calculate");
-        panelAction.add(checkBox, BorderLayout.WEST);
-        panelAction.add(calculateButton, BorderLayout.EAST);
+        panelAction.add(checkBox);
+        panelAction.add(calculateButton);
 
         JLabel resultLabel = new JLabel("Result:");
         JTextField resultField = new JTextField();
@@ -96,6 +97,10 @@ public class View extends JFrame {
             }
         });
 
+        if (checkBox.isSelected()) {
+
+        }
+
         panel.add(panelExpression, BorderLayout.NORTH);
         panel.add(panelAction, BorderLayout.CENTER);
         panel.add(panelResult, BorderLayout.SOUTH);
@@ -108,7 +113,7 @@ public class View extends JFrame {
             @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
                     throws BadLocationException {
-                fb.insertString(offset, text.replaceAll(".*[^\\d*.\\d*]", ""), attr);
+                fb.insertString(offset, text.replaceAll(".*[^\\d*(.)\\d*]", ""), attr);
             }
         });
         return field;
