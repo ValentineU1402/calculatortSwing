@@ -11,30 +11,53 @@ public class CalculateController {
         this.calculateHistory = new ArrayList<>();
     }
 
-    public String calculate(String firstInt, String operation, String secondInd) {
-        float resultExpresion = 0;
+    public String calculate(String firstInt, String operation, String secondInt) {
+        String result = "";
         switch (operation) {
         case ("+"):
-            resultExpresion = Float.parseFloat(firstInt) + Float.parseFloat(secondInd);
+            result = plus(firstInt, secondInt);
             break;
         case ("-"):
-            resultExpresion = Float.parseFloat(firstInt) - Float.parseFloat(secondInd);
+            result = minus(firstInt, secondInt);
             break;
         case ("*"):
-            resultExpresion = Float.parseFloat(firstInt) * Float.parseFloat(secondInd);
+            result = multiply(firstInt, secondInt);
             break;
         case ("/"):
-            resultExpresion = Float.parseFloat(firstInt) / Float.parseFloat(secondInd);
+            result = divide(firstInt, secondInt);
             break;
         default:
             break;
         }
-        addCalculateHistory((firstInt + operation + secondInd) + " = " + resultExpresion + "\n");
-        return Float.toString(resultExpresion);
+        addCalculateHistory((firstInt + operation + secondInt) + " = " + result + "\n");
+        return result;
     }
 
     private void addCalculateHistory(String expresion) {
         calculateHistory.add(expresion);
+    }
+
+    private String plus(String firstNumber, String secondNumber) {
+        float result = Float.parseFloat(firstNumber) + Float.parseFloat(secondNumber);
+        return String.valueOf(result);
+    }
+
+    private String minus(String firstNumber, String secondNumber) {
+        float result = Float.parseFloat(firstNumber) - Float.parseFloat(secondNumber);
+        return String.valueOf(result);
+    }
+
+    private String multiply(String firstNumber, String secondNumber) {
+        float result = Float.parseFloat(firstNumber) * Float.parseFloat(secondNumber);
+        return String.valueOf(result);
+    }
+
+    private String divide(String firstNumber, String secondNumber) {
+        if (Float.parseFloat(secondNumber) == 0) {
+            return "division by zero";
+        }
+        float result = Float.parseFloat(firstNumber) / Float.parseFloat(secondNumber);
+        return String.valueOf(result);
     }
 
     public String getCalculateHistory() {
