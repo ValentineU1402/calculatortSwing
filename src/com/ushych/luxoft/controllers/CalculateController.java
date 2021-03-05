@@ -29,7 +29,7 @@ public class CalculateController {
             default:
                 break;
         }
-        addCalculateHistory((firstInt + operation + secondInd) + " = " + resultExpresion);
+        addCalculateHistory((firstInt + operation + secondInd) + " = " + resultExpresion + "\n");
         return Integer.toString(resultExpresion);
     }
 
@@ -37,8 +37,12 @@ public class CalculateController {
         calculateHistory.add(expresion);
     }
 
-    public List<String> getCalculateHistory() {
-        return calculateHistory;
+    public String getCalculateHistory() {
+        String result = "";
+        for (String expresion : calculateHistory) {
+            result += expresion;
+        }
+        return result;
     }
 
 }

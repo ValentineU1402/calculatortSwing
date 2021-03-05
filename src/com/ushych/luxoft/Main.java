@@ -12,8 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Main extends JFrame {
 
@@ -34,7 +37,18 @@ public class Main extends JFrame {
     private static JTabbedPane createTableWithPanes() {
         JTabbedPane tablePane = new JTabbedPane();
         tablePane.addTab("Calculator", createCalculatorPanel());
-        tablePane.addTab("History", new JPanel());
+        tablePane.addTab("History", createHistoryPanel());
+        tablePane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JTextArea historyField = new JTextArea(controller.getCalculateHistory());
+                historyField.setEditable(false);
+                // historyField.setHorizontalAlignment(JTextField.CENTER);
+                JPanel component = (JPanel) tablePane.getComponentAt(1);
+                component.removeAll();
+                component.add(historyField);
+            }
+        });
         tablePane.setSelectedIndex(0);
         return tablePane;
     }
@@ -42,8 +56,7 @@ public class Main extends JFrame {
     private static JPanel createCalculatorPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 3));
-        // GridBagConstraints bag = new GridBagConstraints();
-        
+
         JTextField firstField = new JTextField(6);
         JComboBox<String> comboBox = createOperationField();
         JTextField secondField = new JTextField(6);
@@ -53,7 +66,7 @@ public class Main extends JFrame {
         JTextField resultField = new JTextField();
         resultField.setEditable(false);
         resultField.setHorizontalAlignment(SwingConstants.RIGHT);
-        
+
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +75,6 @@ public class Main extends JFrame {
                 resultField.setText(result);
             }
         });
-        
 
         panel.add(firstField);
         panel.add(comboBox);
@@ -80,5 +92,11 @@ public class Main extends JFrame {
         String[] opertions = {"+", "-", "*", "/"};
         JComboBox<String> comboBox = new JComboBox<>(opertions);
         return comboBox;
+    }
+
+    private static JPanel createHistoryPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        return panel;
     }
 }
