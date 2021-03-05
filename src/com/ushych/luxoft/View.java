@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -54,9 +55,10 @@ public class View extends JFrame {
             public void stateChanged(ChangeEvent e) {
                 JTextArea historyField = new JTextArea(controller.getCalculateHistory());
                 historyField.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(historyField);
                 JPanel component = (JPanel) tablePane.getComponentAt(1);
                 component.removeAll();
-                component.add(historyField);
+                component.add(scrollPane);
             }
         });
         tablePane.setSelectedIndex(0);
