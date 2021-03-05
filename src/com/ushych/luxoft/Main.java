@@ -1,15 +1,23 @@
 package com.ushych.luxoft;
 
 import java.awt.BorderLayout;
-import com.ushych.luxoft.models.MathOperation;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import com.ushych.luxoft.controllers.CalculateController;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class Main extends JFrame {
+
+    private static CalculateController controller = new CalculateController();
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Swing calculator");
@@ -33,37 +41,44 @@ public class Main extends JFrame {
 
     private static JPanel createCalculatorPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        panel.setLayout(new GridLayout(3, 3));
         // GridBagConstraints bag = new GridBagConstraints();
-
+        
         JTextField firstField = new JTextField(6);
         JComboBox<String> comboBox = createOperationField();
-        JCheckBox checkBox = new JCheckBox("Calculate on the fly");
         JTextField secondField = new JTextField(6);
+        JCheckBox checkBox = new JCheckBox("Calculate on the fly");
+        JButton calculateButton = new JButton("Calculate");
+        JLabel resultLabel = new JLabel("Result:");
+        JTextField resultField = new JTextField();
+        resultField.setEditable(false);
+        resultField.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
+                        secondField.getText());
+                resultField.setText(result);
+            }
+        });
+        
 
-        panel.add(firstField, BorderLayout.NORTH);
-        panel.add(comboBox, BorderLayout.NORTH);
-        // panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(secondField, BorderLayout.NORTH);
+        panel.add(firstField);
+        panel.add(comboBox);
+        panel.add(secondField);
         panel.add(checkBox);
+        panel.add(calculateButton);
+
+        panel.add(resultLabel);
+        panel.add(resultField);
 
         return panel;
     }
 
     private static JComboBox<String> createOperationField() {
-        String[] opertions = {MathOperation.PLUS.getSymbolOperation(), MathOperation.MINUS.getSymbolOperation(),
-                MathOperation.MULTIPLICATION.getSymbolOperation(), MathOperation.DIVISION.getSymbolOperation()};
+        String[] opertions = {"+", "-", "*", "/"};
         JComboBox<String> comboBox = new JComboBox<>(opertions);
-        // ActionListener actionListener = new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // JComboBox<?> box = (JComboBox<?>) e.getSource();
-        // String operation = (String) box.getSelectedItem();
-        //
-        // }
-        // };
-        // comboBox.addActionListener(actionListener);
-        comboBox.setSize(200, 10);
         return comboBox;
     }
 }
