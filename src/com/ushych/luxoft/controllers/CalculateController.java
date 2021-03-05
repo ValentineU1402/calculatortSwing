@@ -12,25 +12,25 @@ public class CalculateController {
     }
 
     public String calculate(String firstInt, String operation, String secondInd) {
-        int resultExpresion = 0;
+        float resultExpresion = 0;
         switch (operation) {
-            case ("+"):
-                resultExpresion = Integer.parseInt(firstInt) + Integer.parseInt(secondInd);
-                break;
-            case ("-"):
-                resultExpresion = Integer.parseInt(firstInt) - Integer.parseInt(secondInd);
-                break;
-            case ("*"):
-                resultExpresion = Integer.parseInt(firstInt) * Integer.parseInt(secondInd);
-                break;
-            case ("/"):
-                resultExpresion = Integer.parseInt(firstInt) / Integer.parseInt(secondInd);
-                break;
-            default:
-                break;
+        case ("+"):
+            resultExpresion = Float.parseFloat(firstInt) + Float.parseFloat(secondInd);
+            break;
+        case ("-"):
+            resultExpresion = Float.parseFloat(firstInt) - Float.parseFloat(secondInd);
+            break;
+        case ("*"):
+            resultExpresion = Float.parseFloat(firstInt) * Float.parseFloat(secondInd);
+            break;
+        case ("/"):
+            resultExpresion = Float.parseFloat(firstInt) / Float.parseFloat(secondInd);
+            break;
+        default:
+            break;
         }
         addCalculateHistory((firstInt + operation + secondInd) + " = " + resultExpresion + "\n");
-        return Integer.toString(resultExpresion);
+        return Float.toString(resultExpresion);
     }
 
     private void addCalculateHistory(String expresion) {
