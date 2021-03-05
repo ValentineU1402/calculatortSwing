@@ -126,9 +126,11 @@ public class View extends JFrame {
                 if (checkBox.isSelected()) {
                     ((AbstractDocument) firstField.getDocument()).addDocumentListener(documentListener);
                     ((AbstractDocument) secondField.getDocument()).addDocumentListener(documentListener);
+                    calculateButton.setEnabled(false);
                 } else {
                     ((AbstractDocument) firstField.getDocument()).removeDocumentListener(documentListener);
                     ((AbstractDocument) secondField.getDocument()).removeDocumentListener(documentListener);
+                    calculateButton.setEnabled(true);
                 }
             }
         });
