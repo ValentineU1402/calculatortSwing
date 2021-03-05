@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -99,15 +101,36 @@ public class View extends JFrame {
             }
         });
 
+        DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
+                        secondField.getText());
+                resultField.setText(result);
+            }
+        };
+
         checkBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (checkBox.isSelected()) {
-                    String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
-                            secondField.getText());
-                    resultField.setText(result);
+                    ((AbstractDocument) firstField.getDocument()).addDocumentListener(documentListener);
+                    ((AbstractDocument) secondField.getDocument()).addDocumentListener(documentListener);
+                } else {
+                    ((AbstractDocument) firstField.getDocument()).removeDocumentListener(documentListener);
+                    ((AbstractDocument) secondField.getDocument()).removeDocumentListener(documentListener);
                 }
-        }
+            }
         });
 
         panel.add(panelExpression, BorderLayout.NORTH);
