@@ -17,26 +17,37 @@ public class CalculateController {
     }
 
     public String calculate(String firstInt, String operation, String secondInt) {
-        var result = 0f;
-        switch (operation) {
-        case ("+"):
-            checkInput(firstInt, operation, secondInt);
-            result = service.plus(parseFloat(firstInt), parseFloat(secondInt));
-            break;
-        case ("-"):
-            result = service.minus(parseFloat(firstInt), parseFloat(secondInt));
-            break;
-        case ("*"):
-            result = service.multiply(parseFloat(firstInt), parseFloat(secondInt));
-            break;
-        case ("/"):
-            result = service.divide(parseFloat(firstInt), parseFloat(secondInt));
-            break;
-        default:
-            break;
+        var result = "";
+        if (checkInput(firstInt, operation, secondInt)) {
+            switch (operation) {
+            case ("+"):
+                result = String.valueOf(service.plus(parseFloat(firstInt), parseFloat(secondInt)));
+                break;
+            case ("-"):
+                result = String.valueOf(service.minus(parseFloat(firstInt), parseFloat(secondInt)));
+                break;
+            case ("*"):
+                result = String.valueOf(service.multiply(parseFloat(firstInt), parseFloat(secondInt)));
+                break;
+            case ("/"):
+                if (Float.parseFloat(secondInt) == 0.0) {
+                    result = "divide by zero";
+                    break;
+                }
+                if (checkInput(firstInt, operation, secondInt)) {
+                    result = String.valueOf(service.divide(parseFloat(firstInt), parseFloat(secondInt)));
+                } else {
+
+                }
+                break;
+            default:
+                break;
+            }
+        } else {
+            result = "Incorect input";
         }
         addCalculateHistory((firstInt + operation + secondInt) + " = " + result);
-        return String.valueOf(result);
+        return result;
     }
 
     private float parseFloat(String number) {
@@ -50,14 +61,11 @@ public class CalculateController {
 
     private boolean checkInput(String first, String operation, String second) {
         var result = false;
-        if ((first.isBlank() && first.isEmpty()) && (second.isBlank() && second.isEmpty())) {
-            result = false;
+        if ((!first.isBlank() && !first.isEmpty()) && (!second.isBlank() && !second.isEmpty())) {
+            result = true;
         }
-
-        if (operation.equals("/")) {
-            if (Float.parseFloat(second) == 0.) {
-                result = false;
-            }
+        if (!(first.length() > 0 || second.length() > 0) && (first.charAt(0) == '0' || second.charAt(0) == '0')) {
+            result = false;
         }
         return result;
     }
