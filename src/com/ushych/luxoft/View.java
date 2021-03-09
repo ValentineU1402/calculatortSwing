@@ -34,9 +34,9 @@ public class View extends JFrame {
 
     private static CalculateController controller = new CalculateController();
 
-    private static JTextField firstField = createFilteredField();
-    private static JComboBox<String> comboBox = createOperationField();;
-    private static JTextField secondField = createFilteredField();
+    private static JTextField firstField = new JTextField();
+    private static JComboBox<String> comboBox = new JComboBox();
+    private static JTextField secondField = new JTextField();
     private static JCheckBox checkBox = new JCheckBox("Calculate on the fly");
     private static JButton calculateButton = new JButton("Calculate");
     private static JLabel resultLabel = new JLabel("Result:");
@@ -82,6 +82,10 @@ public class View extends JFrame {
         panelAction.setLayout(new FlowLayout());
         JPanel panelResult = new JPanel();
         panelResult.setLayout(new GridLayout(0, 2));
+
+        firstField = createFilteredField();
+        comboBox = createOperationField();
+        secondField = createFilteredField();
 
         panelExpression.add(firstField);
         panelExpression.add(comboBox);
