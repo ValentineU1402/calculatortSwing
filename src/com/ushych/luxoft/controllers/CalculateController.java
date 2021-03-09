@@ -4,33 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ushych.luxoft.services.OperationService;
+
 public class CalculateController {
 
-    List<String> calculateHistory;
+    private List<String> calculateHistory;
+    private OperationService service;
 
     public CalculateController() {
         this.calculateHistory = new ArrayList<>();
+        this.service = new OperationService();
     }
 
     public String calculate(String firstInt, String operation, String secondInt) {
-        String result = "";
+        var result = 0f;
         switch (operation) {
         case ("+"):
-            result = plus(firstInt, secondInt);
+            checkInput(firstInt, operation, secondInt);
+            result = service.plus(parseFloat(firstInt), parseFloat(secondInt));
             break;
         case ("-"):
-            result = minus(firstInt, secondInt);
+            result = service.minus(parseFloat(firstInt), parseFloat(secondInt));
             break;
         case ("*"):
-            result = multiply(firstInt, secondInt);
+            result = service.multiply(parseFloat(firstInt), parseFloat(secondInt));
             break;
         case ("/"):
-            result = divide(firstInt, secondInt);
+            result = service.divide(parseFloat(firstInt), parseFloat(secondInt));
             break;
         default:
             break;
         }
         addCalculateHistory((firstInt + operation + secondInt) + " = " + result);
+        return String.valueOf(result);
+    }
+
+    private float parseFloat(String number) {
+        var result = Float.parseFloat(number);
         return result;
     }
 
@@ -38,27 +48,18 @@ public class CalculateController {
         calculateHistory.add(expresion);
     }
 
-    private String plus(String firstNumber, String secondNumber) {
-        float result = Float.parseFloat(firstNumber) + Float.parseFloat(secondNumber);
-        return String.valueOf(result);
-    }
-
-    private String minus(String firstNumber, String secondNumber) {
-        float result = Float.parseFloat(firstNumber) - Float.parseFloat(secondNumber);
-        return String.valueOf(result);
-    }
-
-    private String multiply(String firstNumber, String secondNumber) {
-        float result = Float.parseFloat(firstNumber) * Float.parseFloat(secondNumber);
-        return String.valueOf(result);
-    }
-
-    private String divide(String firstNumber, String secondNumber) {
-        if (Float.parseFloat(secondNumber) == 0) {
-            return "division by zero";
+    private boolean checkInput(String first, String operation, String second) {
+        var result = false;
+        if ((first.isBlank() && first.isEmpty()) && (second.isBlank() && second.isEmpty())) {
+            result = false;
         }
-        float result = Float.parseFloat(firstNumber) / Float.parseFloat(secondNumber);
-        return String.valueOf(result);
+
+        if (operation.equals("/")) {
+            if (Float.parseFloat(second) == 0.) {
+                result = false;
+            }
+        }
+        return result;
     }
 
     public String getCalculateHistory() {

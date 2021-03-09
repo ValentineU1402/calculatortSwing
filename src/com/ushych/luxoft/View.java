@@ -34,6 +34,14 @@ public class View extends JFrame {
 
     private static CalculateController controller = new CalculateController();
 
+    private static JTextField firstField = createFilteredField();
+    private static JComboBox<String> comboBox = createOperationField();;
+    private static JTextField secondField = createFilteredField();
+    private static JCheckBox checkBox = new JCheckBox("Calculate on the fly");
+    private static JButton calculateButton = new JButton("Calculate");
+    private static JLabel resultLabel = new JLabel("Result:");
+    private static JTextField resultField = new JTextField();
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Swing calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,20 +83,13 @@ public class View extends JFrame {
         JPanel panelResult = new JPanel();
         panelResult.setLayout(new GridLayout(0, 2));
 
-        JTextField firstField = createFilteredField();
-        JComboBox<String> comboBox = createOperationField();
-        JTextField secondField = createFilteredField();
         panelExpression.add(firstField);
         panelExpression.add(comboBox);
         panelExpression.add(secondField);
 
-        JCheckBox checkBox = new JCheckBox("Calculate on the fly");
-        JButton calculateButton = new JButton("Calculate");
         panelAction.add(checkBox);
         panelAction.add(calculateButton);
 
-        JLabel resultLabel = new JLabel("Result:");
-        JTextField resultField = new JTextField();
         panelResult.add(resultLabel);
         panelResult.add(resultField);
 
@@ -103,36 +104,15 @@ public class View extends JFrame {
             }
         });
 
-        DocumentListener documentListener = new DocumentListener() {
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                changedUpdate(e);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                changedUpdate(e);
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
-                        secondField.getText());
-                resultField.setText(result);
-            }
-        };
+        DocumentListener documentListener = createDocumentListener();
 
         checkBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (checkBox.isSelected()) {
-                    ((AbstractDocument) firstField.getDocument()).addDocumentListener(documentListener);
-                    ((AbstractDocument) secondField.getDocument()).addDocumentListener(documentListener);
-                    calculateButton.setEnabled(false);
+                    addDocumentListener(documentListener);
                 } else {
-                    ((AbstractDocument) firstField.getDocument()).removeDocumentListener(documentListener);
-                    ((AbstractDocument) secondField.getDocument()).removeDocumentListener(documentListener);
-                    calculateButton.setEnabled(true);
+                    removeDocumentListener(documentListener);
                 }
             }
         });
@@ -167,4 +147,38 @@ public class View extends JFrame {
         panel.setLayout(new BorderLayout());
         return panel;
     }
+
+    private static void addDocumentListener(DocumentListener documentListener) {
+        ((AbstractDocument) firstField.getDocument()).addDocumentListener(documentListener);
+        ((AbstractDocument) secondField.getDocument()).addDocumentListener(documentListener);
+        calculateButton.setEnabled(false);
+    }
+
+    private static void removeDocumentListener(DocumentListener documentListener) {
+        ((AbstractDocument) firstField.getDocument()).removeDocumentListener(documentListener);
+        ((AbstractDocument) secondField.getDocument()).removeDocumentListener(documentListener);
+        calculateButton.setEnabled(true);
+    }
+
+    private static DocumentListener createDocumentListener() {
+        return new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changedUpdate(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                String result = controller.calculate(firstField.getText(), comboBox.getSelectedItem().toString(),
+                        secondField.getText());
+                resultField.setText(result);
+            }
+        };
+    }
+
 }
